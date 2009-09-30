@@ -1,0 +1,96 @@
+<script type="text/javascript" >
+
+var arr = new Array();
+var catCount = 1;
+function chooseAnother(){
+    catCount++;
+    innerStr = "<p>";
+    innerStr = innerStr + "<select size='7' id='intrest_1_"+ catCount +"' style='width:150px;' onchange=\"fillSubSelect(this.value, 'intrest_2_"+ catCount +"', "+ catCount +")\">";
+    innerStr = innerStr + "</select>";
+    innerStr = innerStr + "<select size='7' id='intrest_2_"+ catCount +"' style='width:150px;' onchange=\"fillSubSelect(this.value, 'intrest_3_"+ catCount +"', "+ catCount +")\">";
+    innerStr = innerStr + "</select>";
+    innerStr = innerStr + "<select size='7' id='intrest_3_"+ catCount +"' style='width:150px;' onchange=\"justSelect(this.value, "+ catCount +")\">";
+    innerStr = innerStr + "</select>";
+    innerStr = innerStr + "<input type='hidden' id='hidden_"+ catCount +"' name='hidden_"+ catCount +"' value=''/>"
+    innerStr = innerStr + "</p>";    
+    $('cat-container').innerHTML = $('cat-container').innerHTML + innerStr;
+    $("total_cats").value = catCount;
+    loadPreLoadedData();
+}
+function loadPreLoadedData(){
+   var theSel = document.getElementById("intrest_1_" + catCount);
+   for(var i = 0; i < arr.length; i++){
+        if(arr[i].parent_id == null){            
+            theSel.options[theSel.length] = new Option(arr[i].name, arr[i].id);
+         }
+   } 
+}
+function loadMainSelectBox(){
+    var url = "/qa/get_all_intrests";
+    new Ajax.Request(url, {
+        method: 'get',
+        onComplete: function(transport) {
+          arr = eval(transport.responseText);          
+          //loop over array to get 
+          var theSel = document.getElementById("intrest_1_" + catCount);
+          for(var i = 0; i < arr.length; i++){
+            if(arr[i].parent_id == null){                
+                theSel.options[theSel.length] = new Option(arr[i].name, arr[i].id);
+            }
+          }
+        }
+});
+}
+
+function fillSubSelect(id, elementId, cnt){
+    var theSel = document.getElementById(elementId);    
+    //fill with the new elements
+    theSel.length = 0;
+    var childCount = 0;
+    for(var i = 0; i < arr.length; i++){        
+        if(arr[i].parent_id == id){
+            theSel.options[theSel.length] = new Option(arr[i].name, arr[i].id);
+            childCount++;
+        }
+    }
+    if(childCount == 0){
+        $("hidden_" + cnt).value = id;
+    }
+}
+function justSelect(id, cnt){
+    $("hidden_" + cnt).value = id;
+}
+Event.observe(window, 'load', loadMainSelectBox);
+</script>
+
+<div >
+<h2>Ask a Question</h2>
+<%= error_messages_for :question %>
+<% form_for :question, @question, :url => { :action => "create" } do |f| %>
+    <p>
+        <label>question:</label><br/>
+        <%= f.text_area :title, :rows => 4, :cols => 58 %>
+    </p>
+    <br/>
+    <%= f.check_box :is_public %> Only share this question with my connections
+  <p>
+    <label>add detail:</label><br/>
+    <%= f.text_area :detail, :rows => 4, :cols => 58 %>
+  </p>
+  <div id="cat-container">
+  <label>Categorize this question:</label>
+  <p>
+    <select size="7" id="intrest_1_1" style="width:150px;" onchange="fillSubSelect(this.value, 'intrest_2_1', 1)">    
+    </select>
+    <select size="7" id="intrest_2_1" style="width:150px;" onchange="fillSubSelect(this.value, 'intrest_3_1', 1)">
+    </select>
+    <select size="7" id="intrest_3_1" style="width:150px;" onchange="justSelect(this.value, 1)">
+    </select>
+    <input type="hidden" id="hidden_1" name="hidden_1" value=""/>
+  </p>
+</div>
+<a href="Javascript:;" onclick="chooseAnother()">Choose another category</a><br/>
+<input type="hidden" name="total_cats" id="total_cats" value="1" />
+<%= f.submit "Ask a Question"%>
+<% end %>
+</div>

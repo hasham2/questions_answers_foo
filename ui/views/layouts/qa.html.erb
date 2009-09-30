@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Answers: <%= controller.action_name %></title>
+ <%= javascript_include_tag :defaults %>  
+<!-- Please uncomment following line to use your own css -->
+ <link href="<%= url_for(:controller => :qa, :action => :css, :file => 'qa.css') %>" media="screen" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<a href="/qa">Answers home</a> | <a href="/qa/my_questions_answers">My Q&amp;A</a> | <a href="/qa/ask_a_question">Ask a Question</a>  | <a href="/qa/answer_questions">Answer Questions</a>
+<%= yield  %>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<div>
+<%= error_messages_for :answer %>
+<table cellpadding="0" cellspacing="0" width="600px">
+<tr>
+    <td width="30%" valign="top" align="center">
+      <p><strong><%= @question.user.send user_qa_attribute %></strong></p>
+    </td>
+    <td width="70%" valign="top">
+      <h2>Q. <%= @question.title %></h2>
+      <p>
+        <%= @question.detail %>
+      </p>            
+    </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" width="600px">
+<tr>
+<td width="30%">&nbsp;</td>
+<td width="70%">
+<% if @question.user_id == session[:user_id].to_i && @question.is_closed == false%>
+  <form action="/qa/close" method="post">  
+    <input type="hidden" name="qid" id="qid" value="<%= @question.id %>"  />
+    <input type="submit" name="close" id="close" value="Close this question"  />
+  </form>
+<% else %>
+    <% unless @question.is_closed %>
+    <div id="answer-button" <%= 'style="display:none;"' if @rec_not_saved == true %>>
+        <input type="button" name="answer" id="answer" value="Answer" onclick="Element.show('answer-form');Element.hide('answer-button');" />
+    </div>
+    <% end %>
+<% end %>
+<div <%= 'style="display:none;"' if @rec_not_saved == false %> id="answer-form">
+        <input type="button" name="cancel" id="cancel" value="Cancel" onclick="Element.show('answer-button');Element.hide('answer-form')" />
+        <% form_for :answer, @answer, :url => { :action => "answer" } do |f| %>
+        <%= f.hidden_field :question_id %>
+        <%= f.hidden_field :user_id %>
+        <%= f.text_area :body, :rows => 4, :cols => 40 %><br/>
+        <%= f.text_field :links, :size => "60" %><br/>
+        <%= f.submit "Answer"%>
+        <% end %>  
+ </div>
+ </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" width="600px">
+<% @answers.each do |ans|%>
+  <tr>
+    <td width="30%" valign="top" align="center" style="margin-top:10px;" >
+      <p><strong><%= ans.user.send user_qa_attribute %></strong></p>
+    </td>
+    <td width="70%" valign="top">
+      <p>
+        <%= ans.body %>
+      </p>
+      <% unless ans.links.blank? %>
+        <p>
+        <% ans.links.split(" ").each do |link|%>
+          <a href="<%= link %>" target="_blank"><%= link %></a><br/>
+        <% end %>
+        </p>
+      <% end %>  
+    </td>
+  </tr>
+<% end %>
+</table>
+
+</div>

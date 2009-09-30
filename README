@@ -1,0 +1,40 @@
+QuestionsAnswers
+================
+
+This plugin adds linked in like Questions and Answers functionality to your
+rails application. Plugin assumes existance of model named User and that model
+contains information about users of system. If User model does not exist the
+plugin will print warning message on console at startup. If you dont already
+have authentication user model i recomend you install restful_authentication
+plugin.
+
+The plugin uses login attribute of user model in views by default. You can
+change that default by declaring this constant in your environment.rb file
+
+          VIEW_QA_USER_ATTRIBUTE = "full_name"
+
+To change look of the module change the css refrenced in
+ui/views/layouts/qa.html.erb
+
+Installation
+=======
+Install this plugin in your rails application by running
+
+        ./script/plugin install http://tools.assembla.com/svn/hasham/plugins/questions_answers
+
+To complete installation of plugin run following rake task from root directory
+of your application.
+
+        rake questions_answers:install
+
+This will create database migration to hold Questions and Answers data. After
+running this task run:
+
+        rake db:migrate
+
+to commit changes to database structure.
+
+NOTE: This plugin requires will_paginate to be installed. Install script will
+attempt to install will_paginate from http://github.com
+
+Copyright (c) 2008 Hasham Malik, released under the MIT license

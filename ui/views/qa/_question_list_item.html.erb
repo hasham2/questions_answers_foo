@@ -1,0 +1,9 @@
+<tr>
+  <td width="10%" valign="top">
+    <h2>Q.</h2>
+  </td>
+  <td valign="top">
+    <h2><a href="<%= url_for(:action => 'show', :id => question_list_item.id )%>"><%= question_list_item.title %></a></h2>
+    <small><%= question_list_item.answers.size %> Answers | Asked by <a href="#user_profile_link"><%= question_list_item.user.send user_qa_attribute %></a> | <%= time_ago_in_words(question_list_item.created_at) %> ago in <%= show_question_intrests(question_list_item.intrests) %></small>
+  </td>
+</tr>

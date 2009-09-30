@@ -1,0 +1,74 @@
+<div>
+  <h1>My Q&amp;A</h1>
+  <p> <a href="/qa/my_questions_answers?tab=q"> My Questions </a> | <a href="/qa/my_questions_answers?tab=a"> My Answers </a></p>
+  <% if params[:tab] == "q"%>
+  <div id="q">
+  <table cellpadding="0" cellspacing="0" width="600px">
+  <% @questions.each do |q|%>  
+  <tr>
+  <td width="10%" valign="top">
+    <h2>Q.</h2>
+  </td>
+  <td valign="top">
+    <h2><a href="<%= url_for(:action => 'show', :id => q.id )%>"><%= q.title %></a></h2>
+    <small><%= (q.is_public)?"Private question":"Public Question" %> | <%= q.answers.size %> Answers | <%= time_ago_in_words(q.created_at) %> ago in <%= show_question_intrests(q.intrests) %></small>
+  </td>
+</tr>
+ <% end %>
+  <% unless @questions.size > 0 %>
+  <tr>
+  <td width="10%" valign="top">
+    &nbsp;
+  </td>
+  <td valign="top">
+    <p>No Questions found</p>
+  </td>
+</tr>
+<% end %> 
+ </table>
+  <br/>
+    <p>
+        <%= will_paginate @questions %>
+    </p>
+  </div>
+ <% else %> 
+  <div id="ans">
+  <table cellpadding="0" cellspacing="0" width="600px">
+  <% @answers.each do |ans|%>  
+  <tr>
+  <td width="10%" valign="top">
+    <h2>Q.</h2>
+  </td>
+  <td valign="top">
+    <h2><a href="<%= url_for(:action => 'show', :id => ans.question.id )%>"><%= ans.question.title %></a></h2>
+    <small>Asked by <a href="#user_profile_link"><%= ans.question.user.send user_qa_attribute %></a> | <%= time_ago_in_words(ans.question.created_at) %> ago in <%= show_question_intrests(ans.question.intrests) %> | <%= (ans.question.is_closed)? "Closed" : "Open" %></small>
+  </td>
+</tr>
+ <tr>
+   <td width="10%">&nbsp;</td>
+   <td>
+   <p>
+     <strong>Your Answer:</strong><br/>
+     "<%= ans.body%>"
+   </p>
+   </td>
+ </tr>
+ <% end %>
+  <% unless @answers.size > 0 %>
+  <tr>
+  <td width="10%" valign="top">
+    &nbsp;
+  </td>
+  <td valign="top">
+    <p>No Answers found</p>
+  </td>
+</tr>
+<% end %> 
+ </table>
+  <br/>
+    <p>
+        <%= will_paginate @answers %>
+    </p>
+  </div>
+<% end %>
+</div>
