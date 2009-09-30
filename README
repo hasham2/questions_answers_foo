@@ -20,7 +20,7 @@ Installation
 =======
 Install this plugin in your rails application by running
 
-        ./script/plugin install http://tools.assembla.com/svn/hasham/plugins/questions_answers
+        ./script/plugin install git://github.com/hasham2/questions_answers_foo.git
 
 To complete installation of plugin run following rake task from root directory
 of your application.
